@@ -1,7 +1,7 @@
 # Santander Bootcamp 2023 - Fullstack Java+Angular
 
 ## Aluno
-- [Ágryo Araújo](https://www.dio.me/users/agryo)
+- [Ágryo DIO](https://www.dio.me/users/agryo)
 - [Ágryo LinkedIn](https://www.linkedin.com/in/agryo/)
 
 
