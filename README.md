@@ -6,7 +6,7 @@
 
 
 ## Diagrama de Classes (Domínio da API)
-```
+```mermaid
 ---
 title: Diagrama de Classes
 ---
