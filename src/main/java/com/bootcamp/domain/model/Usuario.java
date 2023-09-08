@@ -1,5 +1,7 @@
 package com.bootcamp.domain.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,10 +26,10 @@ public class Usuario {
     private String email;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Telefone telefones;
+    private List<Telefone> telefones;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Endereco endereco;
+    private List<Endereco> endereco;
 
     public Long getId() { return this.id; }
 
@@ -45,11 +47,11 @@ public class Usuario {
 
     public void setEmail(String email) { this.email = email; }
 
-    public Telefone getTelefones() { return this.telefones; }
+    public List<Telefone> getTelefones() { return this.telefones; }
 
-    public void setTelefones(Telefone telefones) { this.telefones = telefones; }
+    public void setTelefones(List<Telefone> telefones) { this.telefones = telefones; }
 
-    public Endereco getEndereco() { return this.endereco; }
+    public List<Endereco> getEndereco() { return this.endereco; }
 
-    public void setEndereco(Endereco endereco) { this.endereco = endereco; }
+    public void setEndereco(List<Endereco> endereco) { this.endereco = endereco; }
 }

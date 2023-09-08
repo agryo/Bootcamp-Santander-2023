@@ -1,5 +1,7 @@
 package com.bootcamp.domain.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,10 +24,10 @@ public class Negocio {
     private String descricao;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Endereco endereco;
+    private List<Endereco> enderecos;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Telefone telefones;
+    private List<Telefone> telefones;
 
     public Long getId() { return this.id; }
 
@@ -39,11 +41,11 @@ public class Negocio {
 
     public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public Endereco getEndereco() { return this.endereco; }
+    public List<Endereco> getEnderecos() { return this.enderecos; }
 
-    public void setEndereco(Endereco endereco) { this.endereco = endereco; }
+    public void setEnderecos(List<Endereco> enderecos) { this.enderecos = enderecos; }
 
-    public Telefone getTelefones() { return this.telefones; }
+    public List<Telefone> getTelefones() { return this.telefones; }
 
-    public void setTelefones(Telefone telefones) { this.telefones = telefones; }
+    public void setTelefones(List<Telefone> telefones) { this.telefones = telefones; }    
 }
