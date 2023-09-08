@@ -64,3 +64,6 @@ Endereco "1" o-- "1" Coordenadas : possuiCoordenadas
 ```
 ## Links Úteis
 - [Mermaid - Diagramas de Classe](https://mermaid.js.org/)
+
+#### Dica
+- Caso dê problema com a porta 8080, veja se a porta está opcupada com o comando `netstat -ano | findstr :8080`, caso esteja, veja o código e derrube com o comando `taskkill /F /PID 12345` (substitua o 12345 é o código).
