@@ -1,11 +1,12 @@
 # Santander Bootcamp 2023 - Fullstack Java+Angular
 
 ## Aluno
+
 - [Ágryo DIO](https://www.dio.me/users/agryo)
 - [Ágryo LinkedIn](https://www.linkedin.com/in/agryo/)
 
-
 ## Diagrama de Classes (Domínio da API)
+
 ```mermaid
 ---
 title: Diagrama de Classes
@@ -62,8 +63,12 @@ Usuario "1" o-- "*" Endereco : possuiEnereços
 Negocio "1" o-- "1" Endereco : possuiEndereços
 Endereco "1" o-- "1" Coordenadas : possuiCoordenadas
 ```
-## Links Úteis
-- [Mermaid - Diagramas de Classe](https://mermaid.js.org/)
 
-#### Dica
+## Links Úteis
+
+- [Mermaid - Diagramas de Classe](https://mermaid.js.org/)
+- [OpenAPI - Swegger](https://github.com/springdoc/springdoc-openapi)
+
+### Dica
+
 - Caso dê problema com a porta 8080, veja se a porta está ocupada com o comando `netstat -ano | findstr :8080`, caso esteja, veja o código e derrube com o comando `taskkill /F /PID 12345` (substitua o 12345 é o código).
