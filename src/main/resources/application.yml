@@ -1,7 +1,7 @@
 spring:
   datasource:
     url: jdbc:h2:mem:bsd2023
-    username: sa
+    username: bsd2023
     password:
     driverClassName: org.h2.Driver
   jpa:
