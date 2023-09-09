@@ -1,7 +1,6 @@
 package com.guia.domain.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -32,11 +31,9 @@ public class Negocio implements Serializable {
     
     private String descricao;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "negocio",  fetch = FetchType.EAGER)
-    private List<Endereco> enderecos = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Endereco> enderecos;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "negocio",  fetch = FetchType.EAGER)
-    private List<Telefone> telefones = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Telefone> telefones;
 }

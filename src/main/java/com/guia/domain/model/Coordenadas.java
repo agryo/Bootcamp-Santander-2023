@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,8 +22,4 @@ public class Coordenadas implements Serializable {
     private Long id;
     private Double latitude;
     private Double longitude;
-
-    @OneToOne
-    @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
 }

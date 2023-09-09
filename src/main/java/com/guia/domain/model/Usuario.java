@@ -1,7 +1,6 @@
 package com.guia.domain.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -35,11 +34,9 @@ public class Usuario implements Serializable {
     @Column(unique = true)
     private String email;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER)
-    private List<Endereco> enderecos = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Endereco> enderecos;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario",  fetch = FetchType.EAGER)
-    private List<Telefone> telefones = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Telefone> telefones;
 }
