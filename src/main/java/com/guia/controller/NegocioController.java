@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +35,7 @@ public class NegocioController {
         this.usuarioService = usuarioService;
     }
 
+    @Operation(summary = "Salvar um negócio")
     @PostMapping
     public ResponseEntity<Negocio> salvar(@RequestBody Negocio negocioParaSalvar) {
         var negocioSalvo = negocioService.salvarNegocio(negocioParaSalvar);
@@ -42,18 +46,29 @@ public class NegocioController {
         return ResponseEntity.created(localizacao).body(negocioSalvo);
     }
 
+    @Operation(summary = "Lista todos os negócios")
     @GetMapping
     public ResponseEntity<List<Negocio>> listaNegocios() {
         var listaNegocios = negocioService.listaNegocios();
         return ResponseEntity.ok(listaNegocios);
     }
 
+    @Operation(summary = "Buscar negócio por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
+        @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Negocio> buscaNegocioPorId(@PathVariable("id") Long id) {
         Negocio negocio = negocioService.buscarPorId(id);
         return ResponseEntity.ok(negocio);
     }
 
+    @Operation(summary = "Remover um negócio por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerNegocio(@PathVariable("id") Long id) {
         if (negocioService.buscarPorId(id) != null) {
@@ -64,6 +79,11 @@ public class NegocioController {
         }
     }
 
+    @Operation(summary = "Associar um usuário a um negócio")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Associação realizada com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Negócio ou usuário não encontrado")
+    })
     @PostMapping("/{negocioId}/associar-usuario/{usuarioId}")
     public ResponseEntity<Void> associarUsuarioAoNegocio(
             @PathVariable("negocioId") Long negocioId,

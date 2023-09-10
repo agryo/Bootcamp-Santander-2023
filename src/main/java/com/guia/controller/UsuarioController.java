@@ -6,6 +6,9 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +30,7 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    @Operation(summary = "Salvar um usuário")
     @PostMapping
     public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuarioParaSalvar) {
         var usuarioSalvo = usuarioService.salvarUsuario(usuarioParaSalvar);
@@ -37,18 +41,29 @@ public class UsuarioController {
         return ResponseEntity.created(localizacao).body(usuarioSalvo);
     }
 
+    @Operation(summary = "Lista todos os usuários")
     @GetMapping
     public ResponseEntity<List<Usuario>> listaUsuarios() {
         var listaUsuarios = usuarioService.listaUsuarios();
         return ResponseEntity.ok(listaUsuarios);
     }
 
+    @Operation(summary = "Buscar usuário por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> buscaUsuarioPorId(@PathVariable("id") Long id) {
         Usuario usuario = usuarioService.buscarPorId(id);
         return ResponseEntity.ok(usuario);
     }
 
+    @Operation(summary = "Remover um usuário por ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
+        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removerUsuario(@PathVariable("id") Long id) {
         if (usuarioService.buscarPorId(id) != null) {
