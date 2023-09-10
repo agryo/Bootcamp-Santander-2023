@@ -1,8 +1,8 @@
 package com.guia.service;
 
 import java.util.List;
-import java.util.Optional;
 
+import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
 
 /*
@@ -12,6 +12,7 @@ import com.guia.domain.model.Usuario;
 public interface UsuarioService {
     Usuario salvarUsuario(Usuario usuario);
     List<Usuario> listaUsuarios();
-    Optional<Usuario> buscarPorId(Long id);
+    Usuario buscarPorId(Long id);
     void apagarUsuarioPorId(Long id);
+    void associarNegocioAoUsuario(Long usuarioId, Negocio negocio);
 }

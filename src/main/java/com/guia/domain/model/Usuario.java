@@ -39,7 +39,4 @@ public class Usuario implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Telefone> telefones;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Negocio> negocios;
 }
