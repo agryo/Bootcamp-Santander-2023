@@ -10,6 +10,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,4 +37,12 @@ public class Negocio implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Telefone> telefones;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Usuario usuario;
+    
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        usuario.getNegocios().add(this);
+    }
 }
