@@ -13,6 +13,8 @@ import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.servers.Server;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +41,13 @@ import com.guia.service.UsuarioService;
             url = "https://www.linkedin.com/in/agryo/",
             email = "agryostallion@gmail.com"
         )
+    ),
+    servers = @Server(
+        url = "http://localhost:8080",
+        description = "URL do servidor gerado"
     )
 )
+@Tag(name = "Operações de Negócio")
 public class NegocioController {
     @Autowired
     private final NegocioService negocioService;
