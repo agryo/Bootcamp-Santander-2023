@@ -6,9 +6,14 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +29,18 @@ import com.guia.service.UsuarioService;
 
 @RestController
 @RequestMapping("/negocio")
+@OpenAPIDefinition(
+    info = @Info(
+        title = "Projeto Guia-Cruzeta",
+        description = "Projeto RESTful API do Bootcamp Santander 2023",
+        version = "1.0.5",
+        contact = @Contact(
+            name = "Agryo Araujo",
+            url = "https://www.linkedin.com/in/agryo/",
+            email = "agryostallion@gmail.com"
+        )
+    )
+)
 public class NegocioController {
     @Autowired
     private final NegocioService negocioService;

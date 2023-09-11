@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
-
     @Bean
     GroupedOpenApi api() {
         System.out.println("SwaggerConfig is initialized.");
