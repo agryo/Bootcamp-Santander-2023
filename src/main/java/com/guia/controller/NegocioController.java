@@ -4,96 +4,65 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.info.Contact;
-import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.guia.domain.model.Negocio;
-import com.guia.domain.model.Usuario;
 import com.guia.service.NegocioService;
-import com.guia.service.UsuarioService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/negocio")
-@OpenAPIDefinition(
-    info = @Info(
-        title = "Projeto Guia-Cruzeta",
-        description = "Projeto RESTful API do Bootcamp Santander 2023",
-        version = "1.0.5",
-        contact = @Contact(
-            name = "Agryo Araujo",
-            url = "https://www.linkedin.com/in/agryo/",
-            email = "agryostallion@gmail.com"
-        )
-    ),
-    servers = @Server(
-        url = "http://localhost:8080",
-        description = "URL do servidor gerado"
-    )
-)
-@Tag(name = "Operações de Negócio")
+@Tag(name = "Operações de Negócio", description = "API RESTful para gerenciamento de negócios.")
 public class NegocioController {
     @Autowired
     private final NegocioService negocioService;
-    @Autowired
-    private final UsuarioService usuarioService;
 
-    public NegocioController(NegocioService negocioService, UsuarioService usuarioService) {
+    public NegocioController(NegocioService negocioService) {
         this.negocioService = negocioService;
-        this.usuarioService = usuarioService;
     }
 
-    @Operation(summary = "Salvar um negócio")
-    @PostMapping
-    public ResponseEntity<Negocio> salvar(@RequestBody Negocio negocioParaSalvar) {
-        var negocioSalvo = negocioService.salvarNegocio(negocioParaSalvar);
-        URI localizacao = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(negocioSalvo.getId())
-                .toUri();
-        return ResponseEntity.created(localizacao).body(negocioSalvo);
-    }
-
-    @Operation(summary = "Lista todos os negócios")
     @GetMapping
+    @Operation(summary = "Lista todos os negócios", description = "Exibe uma lista com todos os negócios cadastrados no banco de dados. Ou exibe uma lista vazia, caso não tenha nenhum negócio cadastrado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista exibida com sucesso!")
+    })
     public ResponseEntity<List<Negocio>> listaNegocios() {
         var listaNegocios = negocioService.listarNegocios();
         return ResponseEntity.ok(listaNegocios);
     }
 
-    @Operation(summary = "Buscar negócio por ID")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
-        @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
-    })
     @GetMapping("/{id}")
+    @Operation(summary = "Buscar negócio por ID", description = "Exibe o negócio cadastrado no banco de dados com a ID solicitada. Caso não exista, diz que o negócio não existe.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
+            @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
+    })
     public ResponseEntity<Negocio> buscaNegocioPorId(@PathVariable("id") Long id) {
         Negocio negocio = negocioService.buscarPorId(id);
         return ResponseEntity.ok(negocio);
     }
 
-    @Operation(summary = "Remover um negócio por ID")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
-    })
     @DeleteMapping("/{id}")
+    @Operation(summary = "Remover um negócio por ID", description = "Apaga um negócio do banco de dados de acordo com o ID solicitado. Caso não exista, informa que o negócio não existe.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
+    })
     public ResponseEntity<Void> removerNegocio(@PathVariable("id") Long id) {
         if (negocioService.buscarPorId(id) != null) {
             negocioService.apagarNegocioPorId(id);
@@ -103,32 +72,19 @@ public class NegocioController {
         }
     }
 
-    @Operation(summary = "Associar um usuário a um negócio")
+    @PostMapping
+    @Operation(summary = "Salvar um negócio", description = "Salva o negócio preenchido no formulário JSON, caso todos os campos estejam corretos, ele salva o negócio no banco de dados e exibe o negócio criado.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Associação realizada com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Negócio ou usuário não encontrado")
+            @ApiResponse(responseCode = "201", description = "Negócio salvo com sucesso!"),
+            @ApiResponse(responseCode = "422", description = "Negócio já cadastrado!"),
+            @ApiResponse(responseCode = "500", description = "... já cadastrado!")
     })
-    @PostMapping("/{negocioId}/associar-usuario/{usuarioId}")
-    public ResponseEntity<Void> associarUsuarioAoNegocio(
-            @PathVariable("negocioId") Long negocioId,
-            @PathVariable("usuarioId") Long usuarioId) {
-        
-        // Busque o negócio pelo ID
-        Negocio negocio = negocioService.buscarPorId(negocioId);
-        
-        // Busque o usuário pelo ID
-        Usuario usuario = usuarioService.buscarPorId(usuarioId);
-
-        if (negocio != null && usuario != null) {
-            // Associe o usuário ao negócio
-            negocio.setUsuario(usuario);
-            
-            // Salve o negócio para persistir a associação
-            negocioService.salvarNegocio(negocio);
-            
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Negocio> salvar(@RequestBody Negocio negocioParaSalvar) {
+        var negocioSalvo = negocioService.salvarNegocio(negocioParaSalvar);
+        URI localizacao = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(negocioSalvo.getId())
+                .toUri();
+        return ResponseEntity.created(localizacao).body(negocioSalvo);
     }
 }

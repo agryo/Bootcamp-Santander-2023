@@ -1,16 +1,15 @@
 package com.guia.service.impl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import static java.util.Optional.ofNullable;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.guia.domain.model.Negocio;
+//import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
 import com.guia.domain.repository.UsuarioRepository;
-import com.guia.service.NegocioService;
+//import com.guia.service.NegocioService;
 import com.guia.service.UsuarioService;
 import com.guia.service.exception.BusinessException;
 import com.guia.service.exception.NotFoundException;
@@ -20,11 +19,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     private static final Long UNCHANGEABLE_USER_ID = 1L;
 
     private final UsuarioRepository usuarioRepository;
-    private final NegocioService negocioService;
+    //private final NegocioService negocioService;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, NegocioService negocioService) {
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository/*NegocioService negocioService*/) {
          this.usuarioRepository = usuarioRepository;
-         this.negocioService = negocioService;
+         //this.negocioService = negocioService;
     }
 
     @Transactional(readOnly = true)
@@ -60,6 +59,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         this.usuarioRepository.delete(dbUsuario);
     }
 
+/*
     @Transactional
     public void associarNegocioAoUsuario(Long usuarioId, Negocio negocio) {
         Usuario usuario = buscarPorId(usuarioId);
@@ -71,10 +71,10 @@ public class UsuarioServiceImpl implements UsuarioService {
             this.negocioService.salvarNegocio(negocio);
         } else {
             // Trate o caso em que o usuário não foi encontrado
-            throw new NoSuchElementException("Usuário não encontrado");
+            throw new NotFoundException();
         }
     }
-
+*/
     private void validateChangeableId(Long id, String operation) {
         if (UNCHANGEABLE_USER_ID.equals(id)) {
             throw new BusinessException("Usuário com ID %d não pode ser %s.".formatted(UNCHANGEABLE_USER_ID, operation));
