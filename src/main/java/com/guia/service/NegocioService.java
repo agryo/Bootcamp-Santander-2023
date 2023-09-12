@@ -10,7 +10,7 @@ import com.guia.domain.model.Negocio;
  */
 public interface NegocioService {
     Negocio salvarNegocio(Negocio negocio);
-    List<Negocio> listaNegocios();
+    List<Negocio> listarNegocios();
     Negocio buscarPorId(Long id);
     void apagarNegocioPorId(Long id);
 }

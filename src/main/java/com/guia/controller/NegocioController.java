@@ -73,7 +73,7 @@ public class NegocioController {
     @Operation(summary = "Lista todos os negócios")
     @GetMapping
     public ResponseEntity<List<Negocio>> listaNegocios() {
-        var listaNegocios = negocioService.listaNegocios();
+        var listaNegocios = negocioService.listarNegocios();
         return ResponseEntity.ok(listaNegocios);
     }
 

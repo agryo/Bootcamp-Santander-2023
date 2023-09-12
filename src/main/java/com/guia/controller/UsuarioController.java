@@ -47,7 +47,7 @@ public class UsuarioController {
     @Operation(summary = "Lista todos os usuários")
     @GetMapping
     public ResponseEntity<List<Usuario>> listaUsuarios() {
-        var listaUsuarios = usuarioService.listaUsuarios();
+        var listaUsuarios = usuarioService.listarUsuarios();
         return ResponseEntity.ok(listaUsuarios);
     }
 

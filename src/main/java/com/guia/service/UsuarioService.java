@@ -11,7 +11,7 @@ import com.guia.domain.model.Usuario;
  */
 public interface UsuarioService {
     Usuario salvarUsuario(Usuario usuario);
-    List<Usuario> listaUsuarios();
+    List<Usuario> listarUsuarios();
     Usuario buscarPorId(Long id);
     void apagarUsuarioPorId(Long id);
     void associarNegocioAoUsuario(Long usuarioId, Negocio negocio);
