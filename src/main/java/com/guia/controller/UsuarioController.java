@@ -20,8 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
+import com.guia.domain.repository.NegocioRepository;
 import com.guia.service.UsuarioService;
+import com.guia.service.exception.BusinessException;
 
 @CrossOrigin
 @RestController
@@ -31,8 +34,12 @@ public class UsuarioController {
     @Autowired
     private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService usuarioService) {
+    @Autowired
+    private final NegocioRepository negocioRepository; // Injete o NegocioRepository aqui
+
+    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository) {
         this.usuarioService = usuarioService;
+        this.negocioRepository = negocioRepository; // Atribua o NegocioRepository injetado ao campo local
     }
 
     @GetMapping
@@ -86,4 +93,33 @@ public class UsuarioController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/{usuarioId}/negocio")
+    @Operation(summary = "Associar um negócio a um usuário", description = "Associa um negócio a um usuário com base nos IDs fornecidos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Negócio associado com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou Negócio não encontrado"),
+            @ApiResponse(responseCode = "422", description = "Associação já existe")
+    })
+    public ResponseEntity<Usuario> associarNegocioAoUsuario(
+            @PathVariable("usuarioId") Long usuarioId,
+            @RequestBody Negocio negocio) {
+        // Verifique se o ID do usuário existe
+        Usuario usuario = usuarioService.buscarPorId(usuarioId);
+        if (usuario == null) {
+            return ResponseEntity.notFound().build();
+        }
+        // Verifique se o nome do negócio já existe
+        if (negocioRepository.existsByNome(negocio.getNome())) {
+            throw new BusinessException("Este nome de negócio já existe.");
+        }
+        // Associe o negócio ao usuário
+        usuario.getNegocios().add(negocio);
+        // Salve o usuário para atualizar a associação
+        usuarioService.salvarUsuario(usuario);
+
+        return ResponseEntity.created(null).body(usuario);
+    }
+
 }

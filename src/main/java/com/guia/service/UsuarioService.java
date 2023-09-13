@@ -2,7 +2,7 @@ package com.guia.service;
 
 import java.util.List;
 
-//import com.guia.domain.model.Negocio;
+import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
 
 /*
@@ -14,5 +14,5 @@ public interface UsuarioService {
     List<Usuario> listarUsuarios();
     Usuario buscarPorId(Long id);
     void apagarUsuarioPorId(Long id);
-    //void associarNegocioAoUsuario(Long usuarioId, Negocio negocio);
+    Usuario salvarNegocioParaUsuario(Long usuarioId, Negocio negocio);
 }
