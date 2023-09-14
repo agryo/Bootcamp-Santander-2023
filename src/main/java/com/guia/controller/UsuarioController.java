@@ -38,7 +38,8 @@ public class UsuarioController {
     @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository, UsuarioRepository usuarioRepository) {
+    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository,
+            UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
     }
@@ -116,6 +117,39 @@ public class UsuarioController {
             usuarioSelecionado.getNegocios().add(negocio);
             usuarioRepository.save(usuarioSelecionado);
             return ResponseEntity.ok("Negócio adicionado ao usuário com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{usuarioId}/negocios/{negocioId}")
+    @Operation(summary = "Remover um negócio de um usuário", description = "Remove um negócio de um usuário com base nos IDs fornecidos.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
+            @ApiResponse(responseCode = "404", description = "Usuário ou negócio não encontrado")
+    })
+    public ResponseEntity<?> removerNegocio(
+            @PathVariable Long usuarioId,
+            @PathVariable Long negocioId) {
+        // Verifique se o usuário com o ID fornecido existe
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            Usuario usuarioSelecionado = usuario.get();
+            // Encontre o negócio a ser removido
+            Optional<Negocio> negocioParaRemover = usuarioSelecionado.getNegocios()
+                    .stream()
+                    .filter(negocio -> negocio.getId().equals(negocioId.longValue()))
+                    .findFirst();
+
+            if (negocioParaRemover.isPresent()) {
+                // Remova o negócio da lista do usuário
+                usuarioSelecionado.getNegocios().remove(negocioParaRemover.get());
+                usuarioRepository.save(usuarioSelecionado);
+                return ResponseEntity.noContent().build(); // 204 No Content
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

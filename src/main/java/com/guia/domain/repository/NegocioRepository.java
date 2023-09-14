@@ -6,4 +6,5 @@ import com.guia.domain.model.Negocio;
 
 public interface NegocioRepository extends JpaRepository<Negocio, Long> {
     boolean existsByNome(String nome);
+    boolean existsByTelefonesNumero(String numero);
 }

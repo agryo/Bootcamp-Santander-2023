@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -49,22 +48,7 @@ public class NegocioController {
             @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
     })
     public ResponseEntity<Negocio> buscaNegocioPorId(@PathVariable("id") Long id) {
-        Negocio negocio = negocioService.buscarPorId(id);
+        Negocio negocio = negocioService.buscarNegocioPorId(id);
         return ResponseEntity.ok(negocio);
-    }
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Remover um negócio por ID", description = "Apaga um negócio do banco de dados de acordo com o ID solicitado. Caso não exista, informa que o negócio não existe.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso"),
-            @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
-    })
-    public ResponseEntity<Void> removerNegocio(@PathVariable("id") Long id) {
-        if (negocioService.buscarPorId(id) != null) {
-            negocioService.apagarNegocioPorId(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

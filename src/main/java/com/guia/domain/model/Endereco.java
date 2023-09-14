@@ -29,6 +29,6 @@ public class Endereco implements Serializable {
     private String uf;
     private String cep;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Coordenadas coordenadas;
 }
