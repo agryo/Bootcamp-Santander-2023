@@ -1,0 +1,24 @@
+{
+  "nome": "Link Informatica",
+  "descricao": "A melhor assistência de computadores da cidade",
+  "endereco": {
+    "logradouro": "Rua João XXIII",
+    "numero": "123",
+    "bairro": "Santo Antônio",
+    "cidade": "Cruzeta",
+    "uf": "RN",
+    "cep": "59375-000",
+    "coordenadas": {
+      "latitude": -6.409423752011276,
+      "longitude": -36.785114991892485
+    }
+  },
+  "telefones": [
+    {
+      "numero": "(84) 91234-5678"
+    },
+    {
+      "numero": "(84) 99876-5432"
+    }
+  ]
+}

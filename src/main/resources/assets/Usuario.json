@@ -1,0 +1,24 @@
+{
+  "nome": "Agryo Araujo",
+  "cpf": "058.456.824-96",
+  "email": "agryostallion@gmail.com",
+  "enderecos": [
+    {
+      "logradouro": "Rua João Lopes de Araújo",
+      "numero": "258",
+      "bairro": "Centro",
+      "cidade": "Cruzeta",
+      "uf": "RN",
+      "cep": "59375-000",
+      "coordenadas": {
+        "latitude": -6.413175957478162,
+        "longitude": -36.78975243180889
+      }
+    }
+  ],
+  "telefones": [
+    {
+      "numero": "(84) 99173-7558"
+    }
+  ]
+}
