@@ -2,6 +2,7 @@ package com.guia.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,8 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
 import com.guia.domain.repository.NegocioRepository;
+import com.guia.domain.repository.UsuarioRepository;
 import com.guia.service.UsuarioService;
-import com.guia.service.exception.BusinessException;
 
 @CrossOrigin
 @RestController
@@ -35,11 +36,11 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @Autowired
-    private final NegocioRepository negocioRepository; // Injete o NegocioRepository aqui
+    private final UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository) {
+    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository, UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
-        this.negocioRepository = negocioRepository; // Atribua o NegocioRepository injetado ao campo local
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping
@@ -94,32 +95,29 @@ public class UsuarioController {
         }
     }
 
-    @PostMapping("/{usuarioId}/negocio")
+    @PostMapping("/{usuarioId}/negocios")
     @Operation(summary = "Associar um negócio a um usuário", description = "Associa um negócio a um usuário com base nos IDs fornecidos.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Negócio associado com sucesso!"),
             @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
-            @ApiResponse(responseCode = "404", description = "Usuário não encontrado ou Negócio não encontrado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
             @ApiResponse(responseCode = "422", description = "Associação já existe")
     })
-    public ResponseEntity<Usuario> associarNegocioAoUsuario(
-            @PathVariable("usuarioId") Long usuarioId,
+    public ResponseEntity<?> adicionarNegocio(
+            @PathVariable Long usuarioId,
             @RequestBody Negocio negocio) {
-        // Verifique se o ID do usuário existe
-        Usuario usuario = usuarioService.buscarPorId(usuarioId);
-        if (usuario == null) {
+        // Verifique se o usuário com o ID fornecido existe
+        System.out.println("O ID que está sendo alterado é o ID: " + usuarioId); // Log
+        System.out.println("O JSON do négocio recebido foi: " + negocio); // Log
+        Optional<Usuario> usuario = usuarioRepository.findById(usuarioId);
+        if (usuario.isPresent()) {
+            Usuario usuarioSelecionado = usuario.get();
+            negocio.setUsuario(usuarioSelecionado);
+            usuarioSelecionado.getNegocios().add(negocio);
+            usuarioRepository.save(usuarioSelecionado);
+            return ResponseEntity.ok("Negócio adicionado ao usuário com sucesso.");
+        } else {
             return ResponseEntity.notFound().build();
         }
-        // Verifique se o nome do negócio já existe
-        if (negocioRepository.existsByNome(negocio.getNome())) {
-            throw new BusinessException("Este nome de negócio já existe.");
-        }
-        // Associe o negócio ao usuário
-        usuario.getNegocios().add(negocio);
-        // Salve o usuário para atualizar a associação
-        usuarioService.salvarUsuario(usuario);
-
-        return ResponseEntity.created(null).body(usuario);
     }
-
 }

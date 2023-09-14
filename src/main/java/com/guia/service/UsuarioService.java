@@ -14,5 +14,5 @@ public interface UsuarioService {
     List<Usuario> listarUsuarios();
     Usuario buscarPorId(Long id);
     void apagarUsuarioPorId(Long id);
-    Usuario salvarNegocioParaUsuario(Long usuarioId, Negocio negocio);
+    Usuario adicionarNegocio(Long usuarioId, Negocio negocio);
 }

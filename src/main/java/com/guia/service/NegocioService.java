@@ -9,8 +9,8 @@ import com.guia.domain.model.Negocio;
  * Os métodos estão na implementação do serviço, separado.
  */
 public interface NegocioService {
-    Negocio salvarNegocio(Negocio negocio);
-    List<Negocio> listarNegocios();
+    //Negocio salvarNegocio(Negocio negocio);
     Negocio buscarPorId(Long id);
+    List<Negocio> listarNegocios();
     void apagarNegocioPorId(Long id);
 }
