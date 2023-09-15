@@ -22,11 +22,12 @@ public class NegocioServiceImpl implements NegocioService {
 
     @Transactional(readOnly = true)
     public List<Negocio> listarNegocios() {
-        return this.negocioRepository.findAll();
+        return negocioRepository.findAll();
     }
 
     @Transactional(readOnly = true)
     public Negocio buscarNegocioPorId(Long id) {
-        return this.negocioRepository.findById(id).orElseThrow(NotFoundException::new);
+        return negocioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Negócio não encontrado com o ID: " + id));
     }
 }

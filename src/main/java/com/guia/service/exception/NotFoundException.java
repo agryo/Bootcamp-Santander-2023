@@ -1,7 +1,7 @@
 package com.guia.service.exception;
 
-public class NotFoundException extends BusinessException {
-    public NotFoundException() {
-        super("O ID não encontrado.");
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(String message) {
+        super(message);
     }
 }

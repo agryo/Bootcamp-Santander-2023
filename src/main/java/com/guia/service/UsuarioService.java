@@ -10,9 +10,10 @@ import com.guia.domain.model.Usuario;
  * Os métodos estão na implementação do serviço, separado.
  */
 public interface UsuarioService {
-    Usuario salvarUsuario(Usuario usuario);
     List<Usuario> listarUsuarios();
-    Usuario buscarPorId(Long id);
+    Usuario buscarUsuarioPorId(Long id);
     void apagarUsuarioPorId(Long id);
-    Usuario adicionarNegocio(Long usuarioId, Negocio negocio);
+    Usuario salvarUsuario(Usuario usuario);
+    Negocio adicionarNegocio(Long usuarioId, Negocio negocio);
+    void removerNegocioPorId(Long usuarioId, Long negocioId);
 }
