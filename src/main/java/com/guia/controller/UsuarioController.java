@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
-import com.guia.domain.repository.NegocioRepository;
 import com.guia.domain.repository.UsuarioRepository;
 import com.guia.service.UsuarioService;
 
@@ -38,7 +37,7 @@ public class UsuarioController {
     @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    public UsuarioController(UsuarioService usuarioService, NegocioRepository negocioRepository,
+    public UsuarioController(UsuarioService usuarioService,
             UsuarioRepository usuarioRepository) {
         this.usuarioService = usuarioService;
         this.usuarioRepository = usuarioRepository;
