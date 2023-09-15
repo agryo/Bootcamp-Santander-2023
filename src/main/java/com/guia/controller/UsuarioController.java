@@ -3,6 +3,7 @@ package com.guia.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,16 +79,15 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
         })
-        public ResponseEntity<Void> removerUsuario(@PathVariable("id") Long id) {
+        public ResponseEntity<String> removerUsuario(@PathVariable("id") Long id) {
                 usuarioService.apagarUsuarioPorId(id);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.status(HttpStatus.OK).body("Usuário removido com sucesso!");
         }
 
         @PostMapping("/{usuarioId}/negocios")
         @Operation(summary = "Associar um negócio a um usuário", description = "Associa um negócio a um usuário com base nos IDs fornecidos.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "201", description = "Negócio associado com sucesso!"),
-                        @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
                         @ApiResponse(responseCode = "422", description = "Associação já existe")
         })
         public ResponseEntity<Negocio> adicionarNegocio(
@@ -105,15 +105,13 @@ public class UsuarioController {
         @Operation(summary = "Remover um negócio de um usuário", description = "Remove um negócio de um usuário com base nos IDs fornecidos.")
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "204", description = "Negócio removido com sucesso!"),
-                        @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
                         @ApiResponse(responseCode = "403", description = "Acesso não autorizado"),
                         @ApiResponse(responseCode = "404", description = "Usuário ou negócio não encontrado")
         })
-        public ResponseEntity<Void> removerNegocio(
+        public ResponseEntity<String> removerNegocio(
                         @PathVariable Long usuarioId,
                         @PathVariable Long negocioId) {
                 usuarioService.removerNegocioPorId(usuarioId, negocioId);
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.status(HttpStatus.OK).body("Negócio removido com sucesso!");
         }
-
 }

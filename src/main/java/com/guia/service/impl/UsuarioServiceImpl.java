@@ -63,8 +63,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Verifique se o número do negócio já existe
         for (Telefone telefone : negocio.getTelefones()) {
             if (negocioRepository.existsByTelefonesNumero(telefone.getNumero())) {
-                throw new BusinessException("Este número de telefone " + telefone.getNumero()
-                        + " do negócio já está em uso por outro negócio ou usuário.");
+                throw new BusinessException("O número de telefone " + telefone.getNumero()
+                        + ", já está em uso por outro negócio ou usuário.");
             }
         }
         usuario.getNegocios().add(negocio);
