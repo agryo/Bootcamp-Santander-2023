@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<String> handleNoContentException() {
-        return new ResponseEntity<>("ID do recurso não encontrado.", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("O ID não foi encontrado.", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Throwable.class)

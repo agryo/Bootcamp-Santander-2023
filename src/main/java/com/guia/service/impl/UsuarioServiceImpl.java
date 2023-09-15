@@ -36,6 +36,12 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional
+    public void apagarUsuarioPorId(Long id) {
+        Usuario usuarioParaRemover = this.buscarPorId(id);
+        this.usuarioRepository.delete(usuarioParaRemover);
+    }
+
+    @Transactional
     public Usuario salvarUsuario(Usuario usuario) {
         ofNullable(usuario).orElseThrow(() -> new BusinessException("O usuário a ser criado não pode em branco."));
         ofNullable(usuario.getCpf())
@@ -58,12 +64,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional
-    public void apagarUsuarioPorId(Long id) {
-        Usuario usuarioParaRemover = this.buscarPorId(id);
-        this.usuarioRepository.delete(usuarioParaRemover);
-    }
-
-    @Transactional
     public Usuario adicionarNegocio(Long usuarioId, Negocio negocio) {
         // Verifique se o ID do usuário existe
         Usuario usuario = usuarioRepository.findById(usuarioId)
@@ -81,9 +81,8 @@ public class UsuarioServiceImpl implements UsuarioService {
         // Adicione o negócio à lista de negocios do usuário
         usuario.getNegocios().add(negocio);
         // Salve o usuário diretamente no serviço
-        this.usuarioRepository.save(usuario);
         // Retorne o usuário com o negócio salvo
-        return usuario;
+        return this.usuarioRepository.save(usuario);
     }
 
     @Transactional

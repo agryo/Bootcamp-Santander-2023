@@ -11,5 +11,5 @@ import com.guia.domain.model.Negocio;
 public interface NegocioService {
     Negocio buscarNegocioPorId(Long id);
     List<Negocio> listarNegocios();
-    void apagarNegocioPorId(Long id);
+    //void apagarNegocioPorId(Long id);
 }
