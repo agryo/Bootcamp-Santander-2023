@@ -81,7 +81,7 @@ public class UsuarioController {
         })
         public ResponseEntity<String> removerUsuario(@PathVariable("id") Long id) {
                 usuarioService.apagarUsuarioPorId(id);
-                return ResponseEntity.status(HttpStatus.OK).body("Negócio removido com sucesso!");
+                return ResponseEntity.status(HttpStatus.OK).body("Usuário removido com sucesso!");
         }
 
         @PostMapping("/{usuarioId}/negocios")
