@@ -14,6 +14,7 @@ public interface UsuarioService {
     Usuario buscarUsuarioPorId(Long id);
     void apagarUsuarioPorId(Long id);
     Usuario salvarUsuario(Usuario usuario);
+    Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado);
     Negocio adicionarNegocio(Long usuarioId, Negocio negocio);
     void removerNegocioPorId(Long usuarioId, Long negocioId);
 }

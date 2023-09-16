@@ -1,12 +1,14 @@
 package com.guia.service.impl;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.guia.domain.model.Endereco;
 import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Telefone;
 import com.guia.domain.model.Usuario;
@@ -24,7 +26,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private final NegocioRepository negocioRepository;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, NegocioRepository negocioRepository) {
+    public UsuarioServiceImpl(
+            UsuarioRepository usuarioRepository,
+            NegocioRepository negocioRepository) {
         this.usuarioRepository = usuarioRepository;
         this.negocioRepository = negocioRepository;
     }
@@ -50,6 +54,40 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario salvarUsuario(Usuario usuario) {
         validarUsuario(usuario);
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
+        Usuario usuarioExistente = usuarioRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
+        // Atualize os campos simples (nome, CPF, email)
+        if (!Objects.equals(usuarioAtualizado.getNome(), usuarioExistente.getNome())) {
+            usuarioExistente.setNome(usuarioAtualizado.getNome());
+        }
+        if (!Objects.equals(usuarioAtualizado.getCpf(), usuarioExistente.getCpf())) {
+            usuarioExistente.setCpf(usuarioAtualizado.getCpf());
+        }
+        if (!Objects.equals(usuarioAtualizado.getEmail(), usuarioExistente.getEmail())) {
+            usuarioExistente.setEmail(usuarioAtualizado.getEmail());
+        }
+        // Atualize os endereços
+        List<Endereco> enderecosAtualizados = usuarioAtualizado.getEnderecos();
+        List<Endereco> enderecosExistentes = usuarioExistente.getEnderecos();
+        for (Endereco endereco : enderecosAtualizados) {
+            if (!enderecosExistentes.contains(endereco)) {
+                enderecosExistentes.add(endereco);
+            }
+        }
+        // Atualize os telefones
+        List<Telefone> telefonesAtualizados = usuarioAtualizado.getTelefones();
+        List<Telefone> telefonesExistentes = usuarioExistente.getTelefones();
+        for (Telefone telefone : telefonesAtualizados) {
+            if (!telefonesExistentes.contains(telefone)) {
+                telefonesExistentes.add(telefone);
+            }
+        }
+        // Salve o usuário atualizado no banco de dados
+        return usuarioRepository.save(usuarioExistente);
     }
 
     @Transactional
@@ -86,7 +124,8 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .filter(negocio -> negocio.getId().equals(negocioId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Negócio não encontrado."));
-        // Verifique se o usuário que está fazendo a solicitação é o proprietário do negócio
+        // Verifique se o usuário que está fazendo a solicitação é o proprietário do
+        // negócio
         if (!negocioParaRemover.getUsuario().getId().equals(usuarioId)) {
             throw new BusinessException("Você não tem permissão para remover este negócio.");
         }
