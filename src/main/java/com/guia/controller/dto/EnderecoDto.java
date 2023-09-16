@@ -5,11 +5,11 @@ import com.guia.domain.model.Endereco;
 
 public record EnderecoDto(
         Long id,
-        String rua,
+        String logradouro,
         String numero,
         String bairro,
         String cidade,
-        String estado,
+        String uf,
         String cep,
         Coordenadas coordenadas) {
     public EnderecoDto(Endereco modelo) {
@@ -28,11 +28,11 @@ public record EnderecoDto(
     public Endereco toModel() {
         Endereco modelo = new Endereco();
         modelo.setId(this.id);
-        modelo.setLogradouro(this.rua);
+        modelo.setLogradouro(this.logradouro);
         modelo.setNumero(this.numero);
         modelo.setBairro(this.bairro);
         modelo.setCidade(this.cidade);
-        modelo.setUf(this.estado);
+        modelo.setUf(this.uf);
         modelo.setCep(this.cep);
         modelo.setCoordenadas(this.coordenadas);
         return modelo;

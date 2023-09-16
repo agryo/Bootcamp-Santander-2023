@@ -1,6 +1,7 @@
 package com.guia.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.guia.controller.dto.NegocioDto;
 import com.guia.domain.model.Negocio;
 import com.guia.service.NegocioService;
 
@@ -36,9 +38,12 @@ public class NegocioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista exibida com sucesso!")
     })
-    public ResponseEntity<List<Negocio>> listaNegocios() {
-        var listaNegocios = negocioService.listarNegocios();
-        return ResponseEntity.ok(listaNegocios);
+    public ResponseEntity<List<NegocioDto>> listaNegocios() {
+        List<Negocio> listaNegocios = negocioService.listarNegocios();
+        List<NegocioDto> listaNegociosDto = listaNegocios.stream()
+                .map(NegocioDto::new) // Converter Negocio para NegocioDto
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(listaNegociosDto);
     }
 
     @GetMapping("/{id}")
@@ -47,8 +52,9 @@ public class NegocioController {
             @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
             @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
     })
-    public ResponseEntity<Negocio> buscaNegocioPorId(@PathVariable("id") Long id) {
+    public ResponseEntity<NegocioDto> buscaNegocioPorId(@PathVariable("id") Long id) {
         Negocio negocio = negocioService.buscarNegocioPorId(id);
-        return ResponseEntity.ok(negocio);
+        NegocioDto negocioDto = new NegocioDto(negocio); // Converter Negocio para NegocioDto
+        return ResponseEntity.ok(negocioDto);
     }
 }

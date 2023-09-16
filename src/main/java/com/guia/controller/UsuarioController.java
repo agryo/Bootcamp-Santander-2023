@@ -2,6 +2,7 @@ package com.guia.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import com.guia.controller.dto.NegocioDto;
+import com.guia.controller.dto.UsuarioDto;
 import com.guia.domain.model.Negocio;
 import com.guia.domain.model.Usuario;
 import com.guia.service.UsuarioService;
@@ -42,9 +45,12 @@ public class UsuarioController {
         @ApiResponses(value = {
                         @ApiResponse(responseCode = "200", description = "Lista exibida com sucesso!")
         })
-        public ResponseEntity<List<Usuario>> listaUsuarios() {
-                var listaUsuarios = usuarioService.listarUsuarios();
-                return ResponseEntity.ok(listaUsuarios);
+        public ResponseEntity<List<UsuarioDto>> listaUsuarios() {
+                List<Usuario> listaUsuarios = usuarioService.listarUsuarios();
+                List<UsuarioDto> listaUsuariosDto = listaUsuarios.stream()
+                                .map(UsuarioDto::new)
+                                .collect(Collectors.toList());
+                return ResponseEntity.ok(listaUsuariosDto);
         }
 
         @GetMapping("/{id}")
@@ -53,9 +59,10 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
         })
-        public ResponseEntity<Usuario> buscaUsuarioPorId(@PathVariable("id") Long id) {
+        public ResponseEntity<UsuarioDto> buscaUsuarioPorId(@PathVariable("id") Long id) {
                 Usuario usuario = usuarioService.buscarUsuarioPorId(id);
-                return ResponseEntity.ok(usuario);
+                UsuarioDto usuarioDto = new UsuarioDto(usuario);
+                return ResponseEntity.ok(usuarioDto);
         }
 
         @PostMapping
@@ -64,13 +71,17 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "201", description = "Usuário salvo com sucesso!"),
                         @ApiResponse(responseCode = "422", description = "CPF, E-mail ou Telefone já cadastrado!")
         })
-        public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuarioParaSalvar) {
+        public ResponseEntity<UsuarioDto> salvar(@RequestBody UsuarioDto usuarioDtoParaSalvar) {
+                // Converter o UsuarioDto em um objeto Usuario
+                Usuario usuarioParaSalvar = usuarioDtoParaSalvar.toModel();
                 var usuarioSalvo = usuarioService.salvarUsuario(usuarioParaSalvar);
+                // Converter o Usuario de volta para UsuarioDto
+                UsuarioDto usuarioSalvoDto = new UsuarioDto(usuarioSalvo);
                 URI localizacao = ServletUriComponentsBuilder.fromCurrentRequest()
                                 .path("/{id}")
                                 .buildAndExpand(usuarioSalvo.getId())
                                 .toUri();
-                return ResponseEntity.created(localizacao).body(usuarioSalvo);
+                return ResponseEntity.created(localizacao).body(usuarioSalvoDto);
         }
 
         @DeleteMapping("/{id}")
@@ -91,15 +102,19 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "400", description = "Solicitação inválida"),
                         @ApiResponse(responseCode = "422", description = "Associação já existe")
         })
-        public ResponseEntity<Negocio> adicionarNegocio(
+        public ResponseEntity<NegocioDto> adicionarNegocio(
                         @PathVariable Long usuarioId,
-                        @RequestBody Negocio negocio) {
+                        @RequestBody NegocioDto negocioDto) {
+                // Converter o NegocioDto em um objeto Negocio
+                Negocio negocio = negocioDto.toModel();
                 Negocio negocioAssociado = usuarioService.adicionarNegocio(usuarioId, negocio);
+                // Converter o Negocio de volta para NegocioDto
+                NegocioDto negocioAssociadoDto = new NegocioDto(negocioAssociado);
                 URI localizacao = ServletUriComponentsBuilder.fromCurrentRequest()
                                 .path("/{id}")
                                 .buildAndExpand(negocioAssociado.getId())
                                 .toUri();
-                return ResponseEntity.created(localizacao).body(negocioAssociado);
+                return ResponseEntity.created(localizacao).body(negocioAssociadoDto);
         }
 
         @DeleteMapping("/{usuarioId}/negocios/{negocioId}")
@@ -116,5 +131,4 @@ public class UsuarioController {
                 usuarioService.removerNegocioPorId(usuarioId, negocioId);
                 return ResponseEntity.status(HttpStatus.OK).body("Negócio removido com sucesso!");
         }
-
 }
