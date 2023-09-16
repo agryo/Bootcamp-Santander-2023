@@ -28,6 +28,6 @@ public class NegocioServiceImpl implements NegocioService {
     @Transactional(readOnly = true)
     public Negocio buscarNegocioPorId(Long id) {
         return negocioRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Negócio não encontrado com o ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Negócio com o ID: " + id + ", não encontrado!"));
     }
 }

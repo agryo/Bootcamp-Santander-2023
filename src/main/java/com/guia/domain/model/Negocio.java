@@ -45,11 +45,7 @@ public class Negocio implements Serializable {
     private Endereco endereco;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "tb_negocio_telefones",
-        joinColumns = @JoinColumn(name = "tb_negocio_id"),
-        inverseJoinColumns = @JoinColumn(name = "telefones_id")
-    )
+    @JoinTable(name = "tb_negocio_telefones", joinColumns = @JoinColumn(name = "tb_negocio_id"), inverseJoinColumns = @JoinColumn(name = "telefones_id"))
     private List<Telefone> telefones;
 
     @JsonIgnore

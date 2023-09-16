@@ -37,7 +37,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Transactional(readOnly = true)
     public Usuario buscarUsuarioPorId(Long id) {
         return usuarioRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
+                .orElseThrow(() -> new NotFoundException("Usuário com o ID: " + id + ", não encontrado!"));
     }
 
     @Transactional
@@ -64,7 +64,7 @@ public class UsuarioServiceImpl implements UsuarioService {
         for (Telefone telefone : negocio.getTelefones()) {
             if (negocioRepository.existsByTelefonesNumero(telefone.getNumero())) {
                 throw new BusinessException("Este número de telefone " + telefone.getNumero()
-                        + " do negócio já está em uso por outro negócio ou usuário.");
+                        + ", já está em uso por outro negócio ou usuário.");
             }
         }
         usuario.getNegocios().add(negocio);
@@ -86,8 +86,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 .filter(negocio -> negocio.getId().equals(negocioId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Negócio não encontrado."));
-        // Verifique se o usuário que está fazendo a solicitação é o proprietário do
-        // negócio
+        // Verifique se o usuário que está fazendo a solicitação é o proprietário do negócio
         if (!negocioParaRemover.getUsuario().getId().equals(usuarioId)) {
             throw new BusinessException("Você não tem permissão para remover este negócio.");
         }
