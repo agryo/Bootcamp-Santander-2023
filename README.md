@@ -1,9 +1,19 @@
 # Santander Bootcamp 2023 - Fullstack Java+Angular
 
+- [API na Nuvem para Usar](https://bsd-2023-api-prd.up.railway.app/swagger-ui.html)
+- [Site da Railway (Usado para disponibilizar na Nuvem)](https://railway.app/)
+- [Github do Projeto Original da DIO](https://github.com/falvojr/santander-dev-week-2023)
+
 ## Aluno
 
 - [Ágryo DIO](https://www.dio.me/users/agryo)
 - [Ágryo LinkedIn](https://www.linkedin.com/in/agryo/)
+
+## Modelos JSON para usar na API
+
+- [Modelo de Usuário](https://github.com/agryo/Bootcamp-Santander-2023/blob/main/src/main/resources/assets/Usuario.json)
+- [Modelo de Negócio](https://github.com/agryo/Bootcamp-Santander-2023/blob/main/src/main/resources/assets/Negocio.json)
+- [Modelo de Alterar Usuário](https://github.com/agryo/Bootcamp-Santander-2023/blob/main/src/main/resources/assets/Update.json)
 
 ## Diagrama de Classes (Domínio da API)
 
