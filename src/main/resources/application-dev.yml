@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: Guia-Cruzeta-DEV
   datasource:
     url: jdbc:h2:mem:bsd2023
     username: bsd2023

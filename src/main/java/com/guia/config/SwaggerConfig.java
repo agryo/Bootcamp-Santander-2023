@@ -29,7 +29,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 public class SwaggerConfig {
     @Bean
     GroupedOpenApi api() {
-        System.out.println("SwaggerConfig is initialized.");
+        System.out.println("SwaggerConfig foi inicializado.");
         return GroupedOpenApi.builder()
             .group("Guia")
             .packagesToScan("com.guia") // Pacote onde estão os controladores
