@@ -1,10 +1,10 @@
 {
   "nome": "Agryo Araujo",
-  "cpf": "058.456.824-96",
-  "email": "agryostallion@gmail.com",
+  "cpf": "058.456.789-69",
+  "email": "agryo@gmail.com",
   "enderecos": [
     {
-      "logradouro": "Rua João Lopes de Araújo",
+      "logradouro": "Rua João",
       "numero": "258",
       "bairro": "Centro",
       "cidade": "Cruzeta",
@@ -18,7 +18,7 @@
   ],
   "telefones": [
     {
-      "numero": "(84) 99173-7558"
+      "numero": "(84) 99173-8558"
     }
   ]
 }
