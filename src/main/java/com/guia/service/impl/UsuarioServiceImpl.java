@@ -21,17 +21,10 @@ import com.guia.service.exception.NotFoundException;
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
-    private final UsuarioRepository usuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private final NegocioRepository negocioRepository;
-
-    public UsuarioServiceImpl(
-            UsuarioRepository usuarioRepository,
-            NegocioRepository negocioRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.negocioRepository = negocioRepository;
-    }
+    private NegocioRepository negocioRepository;
 
     @Transactional(readOnly = true)
     public List<Usuario> listarUsuarios() {
@@ -60,30 +53,74 @@ public class UsuarioServiceImpl implements UsuarioService {
     public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
+        // Valide o usuário atualizado
+        validarUsuario(usuarioAtualizado);
         // Atualize os campos simples (nome, CPF, email)
         if (!Objects.equals(usuarioAtualizado.getNome(), usuarioExistente.getNome())) {
             usuarioExistente.setNome(usuarioAtualizado.getNome());
         }
         if (!Objects.equals(usuarioAtualizado.getCpf(), usuarioExistente.getCpf())) {
+            // Verifique se o novo CPF já está em uso
+            if (usuarioRepository.existsByCpf(usuarioAtualizado.getCpf())) {
+                throw new BusinessException("Este número de CPF já existe.");
+            }
             usuarioExistente.setCpf(usuarioAtualizado.getCpf());
         }
         if (!Objects.equals(usuarioAtualizado.getEmail(), usuarioExistente.getEmail())) {
+            // Verifique se o novo email já está em uso
+            if (usuarioRepository.existsByEmail(usuarioAtualizado.getEmail())) {
+                throw new BusinessException("Este e-mail já está em uso por outro usuário.");
+            }
             usuarioExistente.setEmail(usuarioAtualizado.getEmail());
         }
         // Atualize os endereços
         List<Endereco> enderecosAtualizados = usuarioAtualizado.getEnderecos();
         List<Endereco> enderecosExistentes = usuarioExistente.getEnderecos();
-        for (Endereco endereco : enderecosAtualizados) {
-            if (!enderecosExistentes.contains(endereco)) {
-                enderecosExistentes.add(endereco);
+        for (Endereco enderecoAtualizado : enderecosAtualizados) {
+            boolean enderecoExistente = false;
+            for (Endereco enderecoExist : enderecosExistentes) {
+                if (Objects.equals(enderecoAtualizado.getId(), enderecoExist.getId())) {
+                    // Se o ID existe, atualize os campos
+                    enderecoExist.setLogradouro(enderecoAtualizado.getLogradouro());
+                    enderecoExist.setNumero(enderecoAtualizado.getNumero());
+                    enderecoExist.setBairro(enderecoAtualizado.getBairro());
+                    enderecoExist.setCidade(enderecoAtualizado.getCidade());
+                    enderecoExist.setUf(enderecoAtualizado.getUf());
+                    enderecoExist.setCep(enderecoAtualizado.getCep());
+                    // Atualize também as coordenadas, se necessário
+                    if (enderecoExist.getCoordenadas() != null && enderecoAtualizado.getCoordenadas() != null) {
+                        enderecoExist.getCoordenadas().setLatitude(enderecoAtualizado.getCoordenadas().getLatitude());
+                        enderecoExist.getCoordenadas().setLongitude(enderecoAtualizado.getCoordenadas().getLongitude());
+                    }
+                    enderecoExistente = true;
+                    break;
+                }
+            }
+            if (!enderecoExistente) {
+                // Se o ID não existe, adicione o novo endereço à lista
+                enderecosExistentes.add(enderecoAtualizado);
             }
         }
         // Atualize os telefones
         List<Telefone> telefonesAtualizados = usuarioAtualizado.getTelefones();
         List<Telefone> telefonesExistentes = usuarioExistente.getTelefones();
-        for (Telefone telefone : telefonesAtualizados) {
-            if (!telefonesExistentes.contains(telefone)) {
-                telefonesExistentes.add(telefone);
+        for (Telefone telefoneAtualizado : telefonesAtualizados) {
+            boolean telefoneExistente = false;
+            for (Telefone telefoneExist : telefonesExistentes) {
+                if (Objects.equals(telefoneAtualizado.getId(), telefoneExist.getId())) {
+                    // Se o ID existe, atualize os campos
+                    telefoneExist.setNumero(telefoneAtualizado.getNumero());
+                    telefoneExistente = true;
+                    break;
+                }
+                // Verifique se o novo número de telefone já está em uso
+                if (usuarioRepository.existsByTelefonesNumero(telefoneAtualizado.getNumero())) {
+                    throw new BusinessException("Este número de telefone já está em uso por outro usuário.");
+                }
+            }
+            if (!telefoneExistente) {
+                // Se o ID não existe, adicione o novo telefone à lista
+                telefonesExistentes.add(telefoneAtualizado);
             }
         }
         // Salve o usuário atualizado no banco de dados
