@@ -1,5 +1,8 @@
 # Santander Bootcamp 2023 - Fullstack Java+Angular
 
+Projeto do **Santander Bootcamp 2023 - Fullstack Java+Angular** do qual eu fiz uma RESTful API de para ser consumida por algum pseudo site ou outro tipo de projeto que tenha um cadastro de usuários do qual esse usuário pode cadastrar o seu negócio para ser exibido em alguem meio de consumo da API (um site por exemplo).
+O usuário faz seu cadastro e em seguida pode ou não associar um negócio ao seu cadastro (perfil).
+
 - [API na Nuvem para Usar](https://bsd-2023-api-prd.up.railway.app/swagger-ui.html)
 - [Site da Railway (Usado para disponibilizar na Nuvem)](https://railway.app/)
 - [Github do Projeto Original da DIO](https://github.com/falvojr/santander-dev-week-2023)
