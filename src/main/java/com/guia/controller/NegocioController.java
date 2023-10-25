@@ -57,4 +57,18 @@ public class NegocioController {
         NegocioDto negocioDto = new NegocioDto(negocio); // Converter Negocio para NegocioDto
         return ResponseEntity.ok(negocioDto);
     }
+
+    @GetMapping("/buscar/{nome}")
+    @Operation(summary = "Buscar negócio por Nome", description = "Exibe os negócios cadastrados no banco de dados com o nome solicitado. Caso não exista, diz que o negócio não existe.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
+            @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
+    })
+    public ResponseEntity<List<NegocioDto>> buscaNegocioPorNome(@PathVariable("nome") String nome) {
+        List<Negocio> negocios = negocioService.buscarNegocioPorNome(nome);
+        List<NegocioDto> negocioDtos = negocios.stream()
+                .map(NegocioDto::new)
+                .collect(Collectors.toList()); // Converter Negocio para NegocioDto
+        return ResponseEntity.ok(negocioDtos);
+    }
 }

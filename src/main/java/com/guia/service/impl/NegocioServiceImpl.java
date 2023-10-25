@@ -30,4 +30,13 @@ public class NegocioServiceImpl implements NegocioService {
         return negocioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Negócio com o ID: " + id + ", não encontrado!"));
     }
+
+    @Transactional(readOnly = true)
+    public List<Negocio> buscarNegocioPorNome(String nome) {
+        List<Negocio> negocios = negocioRepository.findByNome(nome);
+        if (negocios.isEmpty()) {
+            throw new NotFoundException("Negócio com o Nome: " + nome + " não encontrado!");
+        }
+        return negocios;
+    }
 }

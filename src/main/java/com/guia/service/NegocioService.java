@@ -10,5 +10,6 @@ import com.guia.domain.model.Negocio;
  */
 public interface NegocioService {
     List<Negocio> listarNegocios();
+    List<Negocio> buscarNegocioPorNome(String nome);
     Negocio buscarNegocioPorId(Long id);
 }
