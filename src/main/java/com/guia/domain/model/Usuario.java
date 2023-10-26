@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Usuario implements Serializable {
     @Id
-    @Column(name = "id", columnDefinition = "BINARY(16)")
+    @Column(name = "id", columnDefinition = "UUID")
     private UUID id;
 
     private String nome;

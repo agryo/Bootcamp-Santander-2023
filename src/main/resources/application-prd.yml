@@ -4,7 +4,6 @@ spring:
     username: ${PGUSER}
     password: ${PGPASSWORD}
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
-    properties.hibernate.show_sql: true
-    properties.hibernate.format_sql: true
