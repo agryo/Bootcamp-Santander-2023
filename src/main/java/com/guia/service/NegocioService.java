@@ -12,4 +12,6 @@ public interface NegocioService {
     List<Negocio> listarNegocios();
     List<Negocio> buscarNegocioPorNome(String nome);
     Negocio buscarNegocioPorId(Long id);
+    List<Negocio> listarPrimeirosNegocios(int quantidade);
+
 }

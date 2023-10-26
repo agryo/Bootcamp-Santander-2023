@@ -39,4 +39,13 @@ public class NegocioServiceImpl implements NegocioService {
         }
         return negocios;
     }
+
+    @Transactional(readOnly = true)
+    public List<Negocio> listarPrimeirosNegocios(int quantidade) {
+        List<Negocio> negocios = negocioRepository.findAll();
+        if (negocios.size() <= quantidade) {
+            return negocios; // Retorna a lista completa se for menor ou igual à quantidade desejada.
+        }
+        return negocios.subList(0, quantidade); // Retorna os primeiros 'quantidade' negócios.
+    }
 }

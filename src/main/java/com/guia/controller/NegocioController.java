@@ -46,6 +46,19 @@ public class NegocioController {
         return ResponseEntity.ok(listaNegociosDto);
     }
 
+    @GetMapping("/listar/{quantidade}")
+    @Operation(summary = "Lista os primeiros negócios", description = "Exibe os primeiros 'quantidade' negócios cadastrados no banco de dados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista exibida com sucesso!")
+    })
+    public ResponseEntity<List<NegocioDto>> listaPrimeirosNegocios(@PathVariable("quantidade") int quantidade) {
+        List<Negocio> primeirosNegocios = negocioService.listarPrimeirosNegocios(quantidade);
+        List<NegocioDto> negocioDtos = primeirosNegocios.stream()
+                .map(NegocioDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(negocioDtos);
+    }
+
     @GetMapping("/{id}")
     @Operation(summary = "Buscar negócio por ID", description = "Exibe o negócio cadastrado no banco de dados com a ID solicitada. Caso não exista, diz que o negócio não existe.")
     @ApiResponses(value = {
