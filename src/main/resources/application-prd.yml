@@ -5,6 +5,6 @@ spring:
     password: ${PGPASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties.hibernate.show_sql: true
     properties.hibernate.format_sql: true
