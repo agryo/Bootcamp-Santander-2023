@@ -3,6 +3,7 @@ package com.guia.service.impl;
 import java.util.Optional;
 import java.util.Objects;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,13 +33,13 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional(readOnly = true)
-    public Usuario buscarUsuarioPorId(Long id) {
+    public Usuario buscarUsuarioPorId(UUID id) {
         return usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário com o ID: " + id + ", não encontrado!"));
     }
 
     @Transactional
-    public void apagarUsuarioPorId(Long id) {
+    public void apagarUsuarioPorId(UUID id) {
         Usuario usuarioParaRemover = buscarUsuarioPorId(id);
         usuarioRepository.delete(usuarioParaRemover);
     }
@@ -50,7 +51,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional
-    public Usuario atualizarUsuario(Long id, Usuario usuarioAtualizado) {
+    public Usuario atualizarUsuario(UUID id, Usuario usuarioAtualizado) {
         Usuario usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Usuário não encontrado com o ID: " + id));
         // Valide o usuário atualizado
@@ -128,7 +129,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional
-    public Negocio adicionarNegocio(Long usuarioId, Negocio negocio) {
+    public Negocio adicionarNegocio(UUID usuarioId, Negocio negocio) {
         Usuario usuario = buscarUsuarioPorId(usuarioId);
         validarNegocio(negocio);
         // Verifique se o nome do negócio já existe
@@ -153,7 +154,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Transactional
-    public void removerNegocioPorId(Long usuarioId, Long negocioId) {
+    public void removerNegocioPorId(UUID usuarioId, Long negocioId) {
         // Verifica se o usuário existe
         Usuario usuario = buscarUsuarioPorId(usuarioId);
         // Verifica se o negócio existe

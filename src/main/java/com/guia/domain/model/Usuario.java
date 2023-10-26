@@ -3,18 +3,9 @@ package com.guia.domain.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Usuario implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "id", columnDefinition = "BINARY(16)")
+    private UUID id;
 
     private String nome;
 
@@ -50,8 +41,15 @@ public class Usuario implements Serializable {
     @JoinTable(name = "tb_usuario_telefones",
             joinColumns = @JoinColumn(name = "tb_usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "telefones_id"))
-    private List<Telefone> telefones = new ArrayList();
+    private List<Telefone> telefones = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<Negocio> negocios;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.id == null) {
+            this.id = UUID.randomUUID();
+        }
+    }
 }

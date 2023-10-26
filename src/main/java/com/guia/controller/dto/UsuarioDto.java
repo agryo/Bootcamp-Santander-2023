@@ -1,6 +1,7 @@
 package com.guia.controller.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
@@ -9,7 +10,7 @@ import static java.util.stream.Collectors.toList;
 import com.guia.domain.model.Usuario;
 
 public record UsuarioDto(
-        Long id,
+        UUID id,
         String nome,
         String cpf,
         String email,

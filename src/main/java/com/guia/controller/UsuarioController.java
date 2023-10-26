@@ -2,8 +2,10 @@ package com.guia.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.guia.controller.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -57,11 +59,18 @@ public class UsuarioController {
         @GetMapping("/{id}")
         @Operation(summary = "Buscar usuário por ID", description = "Exibe o usuário cadastrado no banco de dados com a ID solicitada. Caso não exista, diz que o usuário não existe.")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+                @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+                @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+                @ApiResponse(responseCode = "400", description = "UUID inválido")
         })
-        public ResponseEntity<UsuarioDto> buscaUsuarioPorId(@PathVariable("id") Long id) {
-                Usuario usuario = usuarioService.buscarUsuarioPorId(id);
+        public ResponseEntity<UsuarioDto> buscaUsuarioPorId(@PathVariable("id") String id) {
+                UUID uuid;
+                try {
+                        uuid = UUID.fromString(id);
+                } catch (IllegalArgumentException e) {
+                        throw new InvalidUUIDException("ID inválido: " + id);
+                }
+                Usuario usuario = usuarioService.buscarUsuarioPorId(uuid);
                 UsuarioDto usuarioDto = new UsuarioDto(usuario);
                 return ResponseEntity.ok(usuarioDto);
         }
@@ -93,7 +102,7 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
         })
         public ResponseEntity<UsuarioDto> atualizarUsuario(
-                        @PathVariable Long id,
+                        @PathVariable UUID id,
                         @RequestBody Usuario usuarioAtualizado) {
                 // Verifique se o usuário com o ID especificado existe no banco de dados
                 Usuario usuarioExistente = usuarioService.atualizarUsuario(id, usuarioAtualizado);
@@ -106,11 +115,18 @@ public class UsuarioController {
         @DeleteMapping("/{id}")
         @Operation(summary = "Remover um usuário por ID", description = "Apaga um usuário do banco de dados de acordo com o ID solicitado. Caso não exista, informa que o usuário não existe.")
         @ApiResponses(value = {
-                        @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
-                        @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
+                @ApiResponse(responseCode = "204", description = "Usuário removido com sucesso"),
+                @ApiResponse(responseCode = "404", description = "Usuário não encontrado"),
+                @ApiResponse(responseCode = "400", description = "UUID inválido")
         })
-        public ResponseEntity<String> removerUsuario(@PathVariable("id") Long id) {
-                usuarioService.apagarUsuarioPorId(id);
+        public ResponseEntity<String> removerUsuario(@PathVariable("id") String id) {
+                UUID uuid;
+                try {
+                        uuid = UUID.fromString(id);
+                } catch (IllegalArgumentException e) {
+                        throw new InvalidUUIDException("ID inválido: " + id);
+                }
+                usuarioService.apagarUsuarioPorId(uuid);
                 return ResponseEntity.status(HttpStatus.OK).body("Usuário removido com sucesso!");
         }
 
@@ -122,7 +138,7 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "422", description = "Associação já existe")
         })
         public ResponseEntity<NegocioDto> adicionarNegocio(
-                        @PathVariable Long usuarioId,
+                        @PathVariable UUID usuarioId,
                         @RequestBody NegocioDto negocioDto) {
                 // Converter o NegocioDto em um objeto Negocio
                 Negocio negocio = negocioDto.toModel();
@@ -145,7 +161,7 @@ public class UsuarioController {
                         @ApiResponse(responseCode = "404", description = "Usuário ou negócio não encontrado")
         })
         public ResponseEntity<String> removerNegocio(
-                        @PathVariable Long usuarioId,
+                        @PathVariable UUID usuarioId,
                         @PathVariable Long negocioId) {
                 usuarioService.removerNegocioPorId(usuarioId, negocioId);
                 return ResponseEntity.status(HttpStatus.OK).body("Negócio removido com sucesso!");

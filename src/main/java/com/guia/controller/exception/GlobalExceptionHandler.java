@@ -30,4 +30,10 @@ public class GlobalExceptionHandler {
         LOGGER.error(message, unexpectedException);
         return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(InvalidUUIDException.class)
+    public ResponseEntity<String> handleInvalidUUIDException(InvalidUUIDException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
 }
