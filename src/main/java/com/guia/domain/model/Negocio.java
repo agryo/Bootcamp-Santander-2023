@@ -39,6 +39,8 @@ public class Negocio implements Serializable {
     @Column(unique = true)
     private String nome;
 
+    private String logomarca;
+
     private String descricao;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)

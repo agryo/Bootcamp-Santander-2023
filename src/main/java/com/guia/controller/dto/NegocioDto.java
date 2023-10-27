@@ -11,6 +11,7 @@ import com.guia.domain.model.Negocio;
 public record NegocioDto(
         Long id,
         String nome,
+        String logomarca,
         String descricao,
         EnderecoDto endereco,
         List<TelefoneDto> telefones) {
@@ -18,6 +19,7 @@ public record NegocioDto(
         this(
                 modelo.getId(),
                 modelo.getNome(),
+                modelo.getLogomarca(),
                 modelo.getDescricao(),
                 ofNullable(modelo.getEndereco()).map(EnderecoDto::new).orElse(null),
                 ofNullable(modelo.getTelefones()).orElse(emptyList()).stream().map(TelefoneDto::new).collect(toList())
@@ -28,6 +30,7 @@ public record NegocioDto(
         Negocio modelo = new Negocio();
         modelo.setId(this.id);
         modelo.setNome(this.nome);
+        modelo.setLogomarca(this.logomarca);
         modelo.setDescricao(this.descricao);
         modelo.setEndereco(ofNullable(this.endereco).map(EnderecoDto::toModel).orElse(null));
         modelo.setTelefones(ofNullable(this.telefones).orElse(emptyList()).stream().map(TelefoneDto::toModel).collect(toList()));
