@@ -40,3 +40,9 @@ tasks.jar {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// Configurar a porta e o perfil padrão
+bootRun {
+	systemProperty 'server.port', '8081' // Altere para a porta desejada
+	systemProperty 'spring.profiles.active', 'mdb' // Altere para o perfil desejado
+}
