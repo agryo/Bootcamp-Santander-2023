@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
         )
     ),
     servers = @Server(
-        url = "https://agryo.cruzeta.com.br/api",
+        url = "http://localhost:8081",
         description = "URL do servidor gerado"
     )
 )
