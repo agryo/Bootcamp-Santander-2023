@@ -22,8 +22,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
         )
     ),
     servers = @Server(
-        url = "http://localhost:8081",
-        description = "URL do servidor gerado"
+        url = "https://agryo.cruzeta.com.br/api/",
+        description = "API Guia Cruzeta"
     )
 )
 public class SwaggerConfig {
@@ -31,7 +31,7 @@ public class SwaggerConfig {
     GroupedOpenApi api() {
         System.out.println("SwaggerConfig foi inicializado.");
         return GroupedOpenApi.builder()
-            .group("Guia")
+            .group("Guia Cruzeta")
             .packagesToScan("com.guia") // Pacote onde estão os controladores
             .build();
     }
