@@ -1,8 +1,10 @@
 package com.guia.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,15 +13,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.guia.controller.dto.NegocioDto;
 import com.guia.domain.model.Negocio;
 import com.guia.service.NegocioService;
+import com.guia.service.UploadService;
+import org.springframework.web.multipart.MultipartFile;
 
 @CrossOrigin
 @RestController
@@ -28,9 +28,11 @@ import com.guia.service.NegocioService;
 public class NegocioController {
     @Autowired
     private final NegocioService negocioService;
-
-    public NegocioController(NegocioService negocioService) {
+    @Autowired
+    private final UploadService uploadService;
+    public NegocioController(NegocioService negocioService, UploadService uploadService) {
         this.negocioService = negocioService;
+        this.uploadService = uploadService;
     }
 
     @GetMapping
@@ -83,5 +85,38 @@ public class NegocioController {
                 .map(NegocioDto::new)
                 .collect(Collectors.toList()); // Converter Negocio para NegocioDto
         return ResponseEntity.ok(negocioDtos);
+    }
+
+    @PostMapping("/upload")
+    @Operation(summary = "Upload de Imagem do Negócio", description = "Faz o upload de uma imagem para o negócio e retorna o link da imagem.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Upload de imagem realizado com sucesso!")
+    })
+    public ResponseEntity<String> fazerUpload(@RequestParam("file") MultipartFile file) {
+        // Verifique se o tipo de arquivo é permitido
+        if (!isFileTypeAllowed(file.getOriginalFilename())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tipo de arquivo não permitido.");
+        }
+
+        String linkDaImagem = uploadService.fazerUpload(file);
+        return ResponseEntity.ok(linkDaImagem);
+    }
+
+    private boolean isFileTypeAllowed(String fileName) {
+        // Lista de tipos de arquivo permitidos
+        List<String> allowedFileTypes = Arrays.asList("jpg", "jpeg", "png", "bmp", "sgv");
+        // Obtém a extensão do arquivo
+        String fileExtension = getFileExtension(fileName);
+
+        // Verifica se a extensão do arquivo está na lista de tipos permitidos
+        return allowedFileTypes.contains(fileExtension.toLowerCase());
+    }
+
+    private String getFileExtension(String fileName) {
+        int lastIndex = fileName.lastIndexOf(".");
+        if (lastIndex == -1) {
+            return ""; // Caso não haja extensão
+        }
+        return fileName.substring(lastIndex + 1);
     }
 }
