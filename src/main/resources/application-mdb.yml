@@ -9,9 +9,5 @@ spring:
     database-platform: org.hibernate.dialect.MariaDBDialect
     hibernate:
       ddl-auto: update
-  servlet:
-    multipart:
-      max-file-size: 1MB
-      max-request-size: 1MB
 upload:
-  directory: ${DIRETORIO}
+  directory: ${UPLOAD_DIRECTORY}

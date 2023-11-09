@@ -1,22 +1,26 @@
 package com.guia.service.impl;
 
-import com.guia.service.UploadService;
-import com.guia.service.exception.BusinessException;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.guia.service.UploadService;
+import com.guia.service.exception.BusinessException;
+
 @Service
 public class UploadServiceImpl implements UploadService {
     @Value("${upload.directory}")
     private String uploadDirectory;
 
+    @Transactional
     public String fazerUpload(MultipartFile file) {
         try {
             byte[] logomarca = file.getBytes();
