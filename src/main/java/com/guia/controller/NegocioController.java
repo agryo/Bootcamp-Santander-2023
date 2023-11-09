@@ -25,10 +25,9 @@ import com.guia.service.UploadService;
 @RequestMapping("/negocio")
 @Tag(name = "Operações de Negócio", description = "API RESTful para gerenciamento de negócios.")
 public class NegocioController {
-    @Autowired
     private final NegocioService negocioService;
-    @Autowired
     private final UploadService uploadService;
+    @Autowired
     public NegocioController(NegocioService negocioService, UploadService uploadService) {
         this.negocioService = negocioService;
         this.uploadService = uploadService;

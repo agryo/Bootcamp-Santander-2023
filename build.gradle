@@ -28,14 +28,18 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-	testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 tasks.jar {
   manifest {
     attributes["Main-Class"] = "com.guia.Application"
   }
+}
+
+// Pasta genérica somente para passar no test do build
+test {
+	environment 'UPLOAD_DIRECTORY', '/temp'
 }
 
 tasks.named('test') {
