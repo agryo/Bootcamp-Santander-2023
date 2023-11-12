@@ -19,3 +19,4 @@ spring:
         web-allow-others: false
 upload:
   directory: ${UPLOAD_DIRECTORY}
+  link: ${UPLOAD_LINK}

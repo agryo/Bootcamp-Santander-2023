@@ -11,3 +11,4 @@ spring:
       ddl-auto: update
 upload:
   directory: ${UPLOAD_DIRECTORY}
+  link: ${UPLOAD_LINK}
