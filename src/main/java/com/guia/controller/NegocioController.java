@@ -1,7 +1,6 @@
 package com.guia.controller;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -90,14 +89,27 @@ public class NegocioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Upload de imagem realizado com sucesso!")
     })
-    public ResponseEntity<String> fazerUpload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> fazerUpload(@RequestParam("file") MultipartFile file) {
         // Verifique se o tipo de arquivo é permitido
         if (!isFileTypeAllowed(file.getOriginalFilename())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Tipo de arquivo não permitido.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createErrorResponse("Tipo de arquivo não permitido."));
         }
 
         String linkDaImagem = uploadService.fazerUpload(file);
-        return ResponseEntity.ok(linkDaImagem);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", "Arquivo enviado com sucesso");
+        response.put("data", Collections.singletonMap("logo_url", linkDaImagem));
+
+        return ResponseEntity.ok(response);
+    }
+
+    private Map<String, Object> createErrorResponse(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", message);
+        return response;
     }
 
     private boolean isFileTypeAllowed(String fileName) {
