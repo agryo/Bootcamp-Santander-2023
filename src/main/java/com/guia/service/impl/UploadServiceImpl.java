@@ -33,7 +33,7 @@ public class UploadServiceImpl implements UploadService {
                 os.write(logomarca);
             }
 
-            String linkDaImagem = link + "/img/" + fileName; // O caminho do link da imagem no Nginx
+            String linkDaImagem = link + fileName; // O caminho do link da imagem no Nginx
             return linkDaImagem;
         } catch (IOException e) {
             throw new BusinessException("Erro ao fazer o upload da imagem.");
