@@ -1,6 +1,7 @@
 package com.guia.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.guia.domain.model.Negocio;
 
@@ -10,7 +11,7 @@ import com.guia.domain.model.Negocio;
  */
 public interface NegocioService {
     List<Negocio> listarNegocios();
-    List<Negocio> buscarNegocioPorNome(String nome);
+    Optional<List<Negocio>> buscarNegocioPorNome(String nome);
     Negocio buscarNegocioPorId(Long id);
     List<Negocio> listarPrimeirosNegocios(int quantidade);
 

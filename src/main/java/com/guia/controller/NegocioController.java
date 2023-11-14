@@ -76,11 +76,20 @@ public class NegocioController {
             @ApiResponse(responseCode = "200", description = "Negócio encontrado"),
             @ApiResponse(responseCode = "404", description = "Negócio não encontrado")
     })
-    public ResponseEntity<List<NegocioDto>> buscaNegocioPorNome(@PathVariable("nome") String nome) {
-        List<Negocio> negocios = negocioService.buscarNegocioPorNome(nome);
+    public ResponseEntity<?> buscaNegocioPorNome(@PathVariable("nome") String nome) {
+        Optional<List<Negocio>> optionalNegocios = negocioService.buscarNegocioPorNome(nome);
+
+        if (optionalNegocios.isEmpty() || optionalNegocios.get().isEmpty()) {
+            // Se o Optional ou a lista estiverem vazios, significa que o negócio não foi encontrado
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("status", 404, "message", "Nenhum négocio encontrado com o nome: " + nome));
+        }
+
+        List<Negocio> negocios = optionalNegocios.get();
         List<NegocioDto> negocioDtos = negocios.stream()
                 .map(NegocioDto::new)
-                .collect(Collectors.toList()); // Converter Negocio para NegocioDto
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(negocioDtos);
     }
 
@@ -117,7 +126,6 @@ public class NegocioController {
         List<String> allowedFileTypes = Arrays.asList("jpg", "jpeg", "png", "bmp", "sgv");
         // Obtém a extensão do arquivo
         String fileExtension = getFileExtension(fileName);
-
         // Verifica se a extensão do arquivo está na lista de tipos permitidos
         return allowedFileTypes.contains(fileExtension.toLowerCase());
     }

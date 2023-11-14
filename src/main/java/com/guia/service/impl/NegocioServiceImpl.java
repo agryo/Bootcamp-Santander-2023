@@ -1,6 +1,8 @@
 package com.guia.service.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,12 +34,9 @@ public class NegocioServiceImpl implements NegocioService {
     }
 
     @Transactional(readOnly = true)
-    public List<Negocio> buscarNegocioPorNome(String nome) {
+    public Optional<List<Negocio>> buscarNegocioPorNome(String nome) {
         List<Negocio> negocios = negocioRepository.findByNome(nome);
-        if (negocios.isEmpty()) {
-            throw new NotFoundException("Negócio com o Nome: " + nome + " não encontrado!");
-        }
-        return negocios;
+        return Optional.of(negocios);
     }
 
     @Transactional(readOnly = true)
